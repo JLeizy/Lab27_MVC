@@ -8,9 +8,17 @@
     <!-- WinExe — оконное приложение (без чёрного окна консоли). -->
     <OutputType>WinExe</OutputType>
 
-    <!-- WPF работает только под Windows, поэтому платформа "net8.0-windows".
-         .NET 8 ставится вместе с Visual Studio 2022 (17.8 и новее). -->
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <!-- WPF работает только под Windows, поэтому платформа "...-windows".
+
+         Версию .NET не пишем числом (net8.0, net10.0 ...), а берём ту, что
+         установлена вместе с Visual Studio. Свойство BundledNETCoreAppTargetFrameworkVersion
+         задаёт сам .NET SDK: например, "8.0" в VS 2022 или "10.0" в VS 2026.
+
+         Зачем: файлы для сборки под "свою" версию уже лежат внутри SDK, поэтому
+         ничего не нужно докачивать из интернета. Если указать другую версию,
+         Visual Studio пытается скачать недостающие файлы с nuget.org, и без доступа
+         к нему сборка падает с ошибкой NU1301. -->
+    <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-windows</TargetFramework>
 
     <!-- Подключаем библиотеки WPF (Window, Button, TextBox и т.д.). -->
     <UseWPF>true</UseWPF>
@@ -23,8 +31,8 @@
     <RootNamespace>CinemaTickets</RootNamespace>
     <AssemblyName>CinemaTickets</AssemblyName>
 
-    <!-- Если на компьютере нет .NET 8, но есть более новая версия (9, 10...),
-         программа всё равно запустится на ней, а не выдаст ошибку. -->
+    <!-- Если готовую программу запустят на компьютере, где стоит только более
+         новая версия .NET, она запустится на ней, а не выдаст ошибку. -->
     <RollForward>Major</RollForward>
   </PropertyGroup>
 
