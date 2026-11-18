@@ -32,6 +32,10 @@ namespace CinemaTickets.Views
         // иначе получился бы лишний (или бесконечный) круг View → Controller → Model → View.
         private bool _isUpdatingView;
 
+        // Какой сеанс сейчас нарисован на экране. Нужен, чтобы заметить смену сеанса
+        // и очистить поля "Ряд"/"Место" (см. UpdateView).
+        private Session? _shownSession;
+
         public MainWindow(CinemaModel model)
         {
             InitializeComponent();
@@ -155,8 +159,18 @@ namespace CinemaTickets.Views
                     : _model.GetSessions(_model.SelectedMovie);
                 SessionComboBox.SelectedItem = _model.SelectedSession;
 
-                // Подсказка о размере зала.
                 Session? session = _model.SelectedSession;
+
+                // Сменился сеанс — значит, и зал может быть другим (в «Зале 2» всего 6 рядов).
+                // Ряд и место, введённые для прошлого сеанса, теперь ничего не значат — очищаем.
+                if (session != _shownSession)
+                {
+                    RowTextBox.Text = "";
+                    SeatTextBox.Text = "";
+                    _shownSession = session;
+                }
+
+                // Подсказка о размере зала.
                 HallHintTextBlock.Text = session == null
                     ? ""
                     : $"В зале {session.Hall.Rows} рядов по {session.Hall.SeatsPerRow} мест. " +
