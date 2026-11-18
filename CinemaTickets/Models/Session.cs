@@ -1,4 +1,4 @@
-namespace CinemaTickets.Models
+﻿namespace CinemaTickets.Models
 {
     /// <summary>
     /// MODEL. Сеанс — показ конкретного фильма в конкретном зале в определённое время.

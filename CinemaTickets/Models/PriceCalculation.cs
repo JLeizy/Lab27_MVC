@@ -1,4 +1,4 @@
-namespace CinemaTickets.Models
+﻿namespace CinemaTickets.Models
 {
     /// <summary>
     /// MODEL. Результат расчёта цены: сколько стоит билет и для какого места и типа

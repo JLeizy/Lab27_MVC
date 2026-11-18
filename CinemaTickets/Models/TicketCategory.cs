@@ -1,4 +1,4 @@
-namespace CinemaTickets.Models
+﻿namespace CinemaTickets.Models
 {
     /// <summary>
     /// MODEL. Тип (категория) билета и его скидка.

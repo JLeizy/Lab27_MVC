@@ -1,4 +1,4 @@
-namespace CinemaTickets.Views
+﻿namespace CinemaTickets.Views
 {
     /// <summary>
     /// VIEW (интерфейс). То, что контроллер может "попросить" у окна.

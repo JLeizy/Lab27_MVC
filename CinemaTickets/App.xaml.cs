@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using CinemaTickets.Controllers;
 using CinemaTickets.Models;
 using CinemaTickets.Views;

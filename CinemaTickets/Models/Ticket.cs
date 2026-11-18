@@ -1,4 +1,4 @@
-namespace CinemaTickets.Models
+﻿namespace CinemaTickets.Models
 {
     /// <summary>
     /// MODEL. Проданный билет. После создания не меняется (все свойства только для чтения):

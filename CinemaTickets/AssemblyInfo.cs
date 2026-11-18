@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 
 // Этот файл создаёт шаблон WPF в Visual Studio.
 // ThemeInfo говорит WPF, где искать стили (темы) элементов управления:
