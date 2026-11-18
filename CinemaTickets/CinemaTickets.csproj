@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Файл проекта: описывает, ЧТО собираем и КАК.
+    Это стандартный проект "WPF App (.NET)" из Visual Studio, как в методичке.
+  -->
+  <PropertyGroup>
+    <!-- WinExe — оконное приложение (без чёрного окна консоли). -->
+    <OutputType>WinExe</OutputType>
+
+    <!-- WPF работает только под Windows, поэтому платформа "net8.0-windows".
+         .NET 8 ставится вместе с Visual Studio 2022 (17.8 и новее). -->
+    <TargetFramework>net8.0-windows</TargetFramework>
+
+    <!-- Подключаем библиотеки WPF (Window, Button, TextBox и т.д.). -->
+    <UseWPF>true</UseWPF>
+
+    <!-- Как в шаблоне Visual Studio: предупреждения о возможных null
+         и автоматические using для System, System.Linq и т.п. -->
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <RootNamespace>CinemaTickets</RootNamespace>
+    <AssemblyName>CinemaTickets</AssemblyName>
+
+    <!-- Если на компьютере нет .NET 8, но есть более новая версия (9, 10...),
+         программа всё равно запустится на ней, а не выдаст ошибку. -->
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+
+</Project>
