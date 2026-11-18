@@ -45,8 +45,11 @@ namespace CinemaTickets.Models
         internal void TakeSeat(int row, int seat) => _takenSeats.Add((row, seat));
         internal void ReleaseSeat(int row, int seat) => _takenSeats.Remove((row, seat));
 
-        /// <summary>Как сеанс выглядит в выпадающем списке.</summary>
-        public override string ToString() =>
-            $"{StartTimeText} · {Hall.Name} · {BasePrice:0} руб. · свободно {FreeSeatsCount}";
+        /// <summary>
+        /// Как сеанс выглядит в выпадающем списке.
+        /// Количество свободных мест сюда не пишем: оно меняется после каждой продажи,
+        /// а список сеансов не перерисовывается. Свободные места видны над схемой зала.
+        /// </summary>
+        public override string ToString() => $"{StartTimeText} · {Hall.Name} · {BasePrice:0} руб.";
     }
 }

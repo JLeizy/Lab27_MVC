@@ -64,10 +64,11 @@ namespace CinemaTickets.Models
         public Session? SelectedSession { get; private set; }
 
         /// <summary>
-        /// Результат последнего расчёта цены (аналог поля result из методички).
+        /// Результат последнего расчёта цены (аналог поля result из методички):
+        /// сумма и для какого места/типа билета она посчитана.
         /// null — цену ещё не считали для текущего сеанса.
         /// </summary>
-        public decimal? LastPrice { get; private set; }
+        public PriceCalculation? LastCalculation { get; private set; }
 
         /// <summary>Выручка — сумма цен всех проданных билетов.</summary>
         public decimal Revenue => _soldTickets.Sum(t => t.Price);
@@ -90,7 +91,7 @@ namespace CinemaTickets.Models
 
             SelectedMovie = movie;
             SelectedSession = GetSessions(movie).FirstOrDefault();
-            LastPrice = null; // цена считалась для другого сеанса — сбрасываем
+            LastCalculation = null; // цена считалась для другого сеанса — сбрасываем
             OnChanged();
         }
 
@@ -104,13 +105,13 @@ namespace CinemaTickets.Models
                 throw new CinemaRuleException("Этот сеанс относится к другому фильму.");
 
             SelectedSession = session;
-            LastPrice = null;
+            LastCalculation = null;
             OnChanged();
         }
 
         /// <summary>
         /// Рассчитать стоимость билета на выбранный сеанс (без продажи).
-        /// Результат сохраняется в <see cref="LastPrice"/>, затем модель
+        /// Результат сохраняется в <see cref="LastCalculation"/>, затем модель
         /// сообщает виду, что пора обновиться — ровно как Calculate() в методичке.
         /// </summary>
         public decimal CalculatePrice(int row, int seat, TicketCategory category)
@@ -119,9 +120,10 @@ namespace CinemaTickets.Models
             CheckSeatExists(session, row, seat);
             CheckCategoryAllowed(session.Movie, category);
 
-            LastPrice = ComputePrice(session, row, category);
+            decimal price = ComputePrice(session, row, category);
+            LastCalculation = new PriceCalculation(row, seat, category, price);
             OnChanged();
-            return LastPrice.Value;
+            return price;
         }
 
         /// <summary>
@@ -145,7 +147,7 @@ namespace CinemaTickets.Models
 
             session.TakeSeat(row, seat);
             _soldTickets.Add(ticket);
-            LastPrice = price;
+            LastCalculation = new PriceCalculation(row, seat, category, price);
 
             OnChanged(); // вид перерисует схему зала, таблицу билетов и выручку
             return ticket;
@@ -158,7 +160,7 @@ namespace CinemaTickets.Models
                 throw new CinemaRuleException("Такого билета нет среди проданных.");
 
             ticket.Session.ReleaseSeat(ticket.Row, ticket.Seat);
-            LastPrice = null;
+            LastCalculation = null;
             OnChanged();
         }
 

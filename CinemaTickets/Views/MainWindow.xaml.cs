@@ -32,8 +32,10 @@ namespace CinemaTickets.Views
         // иначе получился бы лишний (или бесконечный) круг View → Controller → Model → View.
         private bool _isUpdatingView;
 
-        // Какой сеанс сейчас нарисован на экране. Нужен, чтобы заметить смену сеанса
-        // и очистить поля "Ряд"/"Место" (см. UpdateView).
+        // Какой фильм и сеанс сейчас показаны на экране. Нужны, чтобы заметить их смену
+        // (см. UpdateView): при смене фильма — заново заполнить список сеансов,
+        // при смене сеанса — очистить поля "Ряд"/"Место".
+        private Movie? _shownMovie;
         private Session? _shownSession;
 
         public MainWindow(CinemaModel model)
@@ -152,11 +154,19 @@ namespace CinemaTickets.Views
             _isUpdatingView = true;
             try
             {
-                // Выбранный фильм и список его сеансов.
+                // Выбранный фильм.
                 MovieComboBox.SelectedItem = _model.SelectedMovie;
-                SessionComboBox.ItemsSource = _model.SelectedMovie == null
-                    ? null
-                    : _model.GetSessions(_model.SelectedMovie);
+
+                // Список сеансов заполняем заново, только когда сменился фильм.
+                // Если пересоздавать его при каждом обновлении, то при выборе сеанса
+                // список менялся бы прямо внутри его же события SelectionChanged.
+                if (_model.SelectedMovie != _shownMovie)
+                {
+                    SessionComboBox.ItemsSource = _model.SelectedMovie == null
+                        ? null
+                        : _model.GetSessions(_model.SelectedMovie);
+                    _shownMovie = _model.SelectedMovie;
+                }
                 SessionComboBox.SelectedItem = _model.SelectedSession;
 
                 Session? session = _model.SelectedSession;
@@ -179,7 +189,11 @@ namespace CinemaTickets.Views
                 DrawSeatMap();
 
                 // Результат последнего расчёта (в методичке: ResultTextBlock.Text = result.ToString()).
-                PriceTextBlock.Text = _model.LastPrice is decimal price ? $"{price:0} руб." : "—";
+                PriceCalculation? calculation = _model.LastCalculation;
+                PriceTextBlock.Text = calculation == null ? "—" : $"{calculation.Price:0} руб.";
+                PriceDetailsTextBlock.Text = calculation == null
+                    ? "Выберите место и нажмите «Рассчитать стоимость»"
+                    : $"Ряд {calculation.Row}, место {calculation.Seat}, {calculation.Category.Name.ToLower()}";
 
                 // Таблица билетов: новые сверху, чтобы только что проданный был виден сразу.
                 TicketsListView.ItemsSource = _model.SoldTickets

@@ -49,6 +49,9 @@
             <Setter Property="Padding" Value="0"/>
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <!-- Место не забирает фокус клавиатуры: схема перерисовывается после щелчка,
+                 и фокус не должен "теряться" вместе со старой кнопкой. -->
+            <Setter Property="Focusable" Value="False"/>
             <Setter Property="BorderBrush" Value="#FF9E9E9E"/>
             <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
             <Setter Property="Template">
@@ -139,6 +142,9 @@
                         <TextBlock Text="Стоимость билета" Foreground="Gray"/>
                         <TextBlock x:Name="PriceTextBlock" Text="—"
                                    FontSize="28" FontWeight="Bold"/>
+                        <!-- Для какого места и типа билета посчитана цена. -->
+                        <TextBlock x:Name="PriceDetailsTextBlock" Foreground="Gray"
+                                   FontSize="11" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Border>
 

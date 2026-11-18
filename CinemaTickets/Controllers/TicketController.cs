@@ -40,6 +40,10 @@ namespace CinemaTickets.Controllers
                 return;
 
             _model.SelectMovie(movie);
+
+            // Сообщение в строке статуса заодно заменяет старое (например, прошлую ошибку).
+            _view.ShowInfo($"Фильм «{movie.Title}», сеанс {_model.SelectedSession?.StartTimeText}. " +
+                           "Выберите место на схеме зала.");
         }
 
         /// <summary>Пользователь выбрал сеанс в списке.</summary>
@@ -51,6 +55,7 @@ namespace CinemaTickets.Controllers
             try
             {
                 _model.SelectSession(session);
+                _view.ShowInfo($"Сеанс {session.StartTimeText}, {session.Hall.Name}. Выберите место на схеме зала.");
             }
             catch (CinemaRuleException ex)
             {
