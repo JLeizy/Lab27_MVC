@@ -1,13 +1,13 @@
 <!--
-    App.xaml — точка входа WPF-приложения.
-    StartupUri указывает, какое окно открыть при запуске.
-    (Позже, когда появятся Model и Controller, мы заменим StartupUri
-     на ручную "сборку" MVC в App.xaml.cs.)
+    App.xaml — описание приложения.
+
+    StartupUri здесь специально НЕ указан: если бы WPF сам создал окно,
+    он не смог бы передать ему модель и контроллер. Поэтому окно создаётся
+    вручную в App.xaml.cs (метод OnStartup), где связываются Model, View и Controller.
 -->
 <Application x:Class="CinemaTickets.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="Views/MainWindow.xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
     </Application.Resources>
 </Application>
